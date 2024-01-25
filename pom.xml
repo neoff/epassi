@@ -159,9 +159,6 @@
 							</configOptions>
 							<importMappings>
 								<importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
-								<importMapping>ErrorData=${project.groupId}.${project.artifactId}.exception.model.ErrorData</importMapping>
-								<importMapping>ErrorResponse=${project.groupId}.${project.artifactId}.exception.model.ErrorResponse
-								</importMapping>
 							</importMappings>
 							<typeMappings>
 								<typeMapping>OffsetDateTime=LocalDateTime</typeMapping>

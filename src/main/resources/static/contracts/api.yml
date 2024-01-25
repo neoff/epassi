@@ -47,9 +47,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/WordFrequencyResponse'
         '400':
-          description: Incorrect request
+          description: Bad Request
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 timestamp: '2020-08-07T07:09:41.889+00:00'
                 path: /api/frequency
@@ -58,15 +60,18 @@ paths:
                 message: 'Bad parameter file'
                 requestId: "4121d29f-2949"
         '500':
-          description: Internal error
+          description: Internal server error
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 timestamp: '2020-08-07T07:09:41.889+00:00'
                 path: /api/frequency
-                status: 400
+                status: 500
                 error: Internal server error
                 message: ''
+                requestId: "4121d29f-2949"
     post:
       tags:
         - WordFrequency
@@ -105,31 +110,37 @@ paths:
                 contentType: text/plain; charset=utf-8
       responses:
         '200':
-          description: OK. Ответ содержит маппинги магазин-прейскурант.
+          description: Response count word frequency
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/WordFrequencyResponse'
         '400':
-          description: Incorrect request
+          description: Bad Request
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 timestamp: '2020-08-07T07:09:41.889+00:00'
                 path: /api/frequency
                 status: 400
                 error: Bad Request
                 message: 'Bad parameter file'
+                requestId: "4121d29f-2949"
         '500':
-          description: Internal error
+          description: Internal server error
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
               example:
                 timestamp: '2020-08-07T07:09:41.889+00:00'
                 path: /api/frequency
-                status: 400
+                status: 500
                 error: Internal server error
                 message: ''
+                requestId: "4121d29f-2949"
 components:
   schemas:
     WordFrequencyResponse:
@@ -148,3 +159,31 @@ components:
           type: integer
           example: 10
           description: How many time k-word found in text.
+    ErrorResponse:
+      type: object
+      description: Model error.
+      properties:
+        timestamp:
+          type: string
+          example: '2020-08-07T07:09:41.889+00:00'
+          description: Time of request
+        path:
+          type: string
+          example: /api/frequency
+          description: Request path
+        status:
+          type: integer
+          example: 400
+          description: Response status
+        error:
+          type: string
+          example: Bad Request
+          description: Response error
+        message:
+          type: string
+          example: 'Bad parameter file'
+          description: Response message
+        requestId:
+          type: string
+          example: "4121d29f-2949"
+          description: Request id
