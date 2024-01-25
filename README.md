@@ -1,19 +1,20 @@
 # Getting Started
 
-It is test technical task for the company
+It is test technical task for the company [Epassi](https://www.epassi.fi/)
 ### Run
+ * DockerHub image: [varg/epassi](https://hub.docker.com/r/varg/epassi)
  * Application work on port `8080` by default
 ```shell
-docker run -p 8080:8080 -v /target/test-classes:/app/target tech-task
+docker run -p 8080:8080 -v /target/test-classes:/app/target varg/epassi
 ```
  * By default application has a `book.txt` file in `/app/target` directory
  * To run with a custom file(s) you need to mount the volume (or file) to the container in the `/app/target` directory
 ```shell
-docker run -p 8080:8080 -v /path/to/uploaded/file.txt:/app/target/file.txt tech-task
+docker run -p 8080:8080 -v /path/to/uploaded/file.txt:/app/target/file.txt varg/epassi
 ```
 or
 ```shell
-docker run -p 8080:8080 -v /path/to/files/folder:/app/target tech-task
+docker run -p 8080:8080 -v /path/to/files/folder:/app/target varg/epassi
 ```
 ### API
  * The Swagger UI page will then be available at 
