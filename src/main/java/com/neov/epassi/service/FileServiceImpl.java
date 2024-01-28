@@ -33,14 +33,20 @@ public class FileServiceImpl implements FileService {
              }).next();
   }
   
-  
   private Mono<Path> saveFile(Flux<DataBuffer> content, Path targetPath) {
-    return Mono.fromCallable(() -> {
-      Files.createDirectories(targetPath.getParent());
-      OutputStream outputStream = new FileOutputStream(targetPath.toFile());
-      DataBufferUtils.write(content, outputStream);
-      return targetPath;
-    });
+    return DataBufferUtils.join(content)
+                          .flatMap(dataBuffer -> {
+                            byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                            dataBuffer.read(bytes);
+                            DataBufferUtils.release(dataBuffer); // Release resources associated with the DataBuffer
+                            
+                            // Save the content to the target path
+                            return Mono.fromCallable(() -> {
+                              Files.createDirectories(targetPath.getParent());
+                              Files.write(targetPath, bytes);
+                              return targetPath;
+                            });
+                          });
   }
   
   @Override
