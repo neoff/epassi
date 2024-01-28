@@ -17,7 +17,8 @@ or
 docker run -p 8080:8080 -v /path/to/files/folder:/app/target varg/epassi
 ```
 ### API
- * The Swagger UI page will then be available at 
+ * The Swagger UI page will then be available at
+ * for POST request used Basic Auth with username `user` and password `password`
 [http://server:port/swagger-ui.html](http://localhost:8080/swagger-ui.html) 
 and the OpenAPI description will be available at the following url for json format: [http://server:port/v3/api-docs](http://localhost:8080/v3/api-docs)
    * server: The server name or IP
@@ -33,7 +34,7 @@ curl --location 'http://127.0.0.1:8080/api/freqency?file=.%2Ftarget%2Ftest-class
 ```
 ##### Upload file and search
 ```shell
-curl -X POST -F "file=@src/test/resources/small.txt" http://localhost:8080/api/freqency\?word\=doom
+curl --user user:password -X POST -F "file=@src/test/resources/small.txt" http://localhost:8080/api/freqency\?word\=doom
 ```
 ### Builds
 
