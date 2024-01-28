@@ -57,11 +57,28 @@ class FileServiceTest {
     Path path = resource.getFile().toPath();
     
     // When:
-    var result = fileUploadService.readWordsFromFile(path.toString(), ignoreCase);
+    var result = fileUploadService.readWordsFromFile(path.toString(), true);
     
     // Then:
     Assertions.assertNotNull(result);
     Assertions.assertFalse(result.isEmpty());
+    
+    // When:
+    result = fileUploadService.readWordsFromFile(path.toString(), false);
+    
+    // Then:
+    Assertions.assertNotNull(result);
+    Assertions.assertFalse(result.isEmpty());
+  }
+  
+  
+  @Test
+  void testGetWordFrequency_file_not_exist() throws IOException {
+    // Given:
+    var word = "Romeo";
+    String nonExistentFilePath = "/path/to/nonexistent/file.txt";
+    // Then:
+    Assertions.assertThrows(RuntimeException.class, () -> fileUploadService.readWordsFromFile(nonExistentFilePath, true));
   }
   
 }
