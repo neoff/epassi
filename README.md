@@ -12,13 +12,13 @@ docker run -p 8080:8080 -v /target/test-classes:/app/target varg/epassi
 ```shell
 docker run -p 8080:8080 -v /path/to/uploaded/file.txt:/app/target/file.txt varg/epassi
 ```
-or
+or folder with files
 ```shell
 docker run -p 8080:8080 -v /path/to/files/folder:/app/target varg/epassi
 ```
 ### API
- * The Swagger UI page will then be available at
  * for POST request used Basic Auth with username `user` and password `password`
+ * The Swagger UI page will then be available at the following url:
 [http://server:port/swagger-ui.html](http://localhost:8080/swagger-ui.html) 
 and the OpenAPI description will be available at the following url for json format: [http://server:port/v3/api-docs](http://localhost:8080/v3/api-docs)
    * server: The server name or IP
@@ -26,15 +26,21 @@ and the OpenAPI description will be available at the following url for json form
    * context-path: The context path of the application
 
 #### Request examples:
-##### Search in existing file
+
+##### Request parameters:
+ * `limit` - number of words to return
+ * `file` - path to file
+ * `ignoreCase` - ignore case sensitivity (not required, default `true`)
+
+##### Get frequency from existing file
 ```shell
-curl --location 'http://127.0.0.1:8080/api/freqency?file=.%2Ftarget%2Ftest-classes%2Fbook.txt&word=Romeo' \
+curl --location 'http://127.0.0.1:8080/api/freqency?file=.%2Ftarget%2Ftest-classes%2Fbook.txt&limit=5' \
 --header 'Accept: application/json' \
 --header 'Content-Type: text/plain'
 ```
-##### Upload file and search
+##### Upload file and get frequency
 ```shell
-curl --user user:password -X POST -F "file=@src/test/resources/small.txt" http://localhost:8080/api/freqency\?word\=doom
+curl --user user:password -X POST -F "file=@src/test/resources/small.txt" http://localhost:8080/api/freqency\?limit\=2
 ```
 ### Builds
 
