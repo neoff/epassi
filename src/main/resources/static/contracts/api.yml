@@ -14,6 +14,139 @@ paths:
   /api/freqency:
     get:
       tags:
+        - Frequency
+      summary: Get word frequency in file
+      description: >-
+          Method get file path and K-word and return how many time K-word in text
+      operationId: getTopFrequency
+      parameters:
+        - name: file
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Full path to file
+        - name: limit
+          in: query
+          required: true
+          schema:
+              type: integer
+              default: 10
+          description: Limit of result
+        - name: ignoreCase
+          in: query
+          required: false
+          schema:
+              type: boolean
+              default: true
+          description: Ignore Case
+
+      responses:
+        '200':
+          description: Response top word frequency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FrequencyResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2020-08-07T07:09:41.889+00:00'
+                path: /api/frequency
+                status: 400
+                error: Bad Request
+                message: 'Bad parameter file'
+                requestId: "4121d29f-2949"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2020-08-07T07:09:41.889+00:00'
+                path: /api/frequency
+                status: 500
+                error: Internal server error
+                message: ''
+                requestId: "4121d29f-2949"
+    post:
+      tags:
+        - Frequency
+      summary: Receive a file and count top word frequency in file
+      description: >-
+        Method get K-word and receive file and return how many time K-word in text
+      operationId: topFrequency
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: K-word to search
+          schema:
+            type: integer
+            default: 10
+        - in: query
+          required: false
+          description: Ignore Case
+          name: ignoreCase
+          schema:
+            type: boolean
+            default: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Some file. text-plain format.
+            encoding:
+              file:
+                contentType: text/plain; charset=utf-8
+      responses:
+        '200':
+          description: Response top word frequency
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FrequencyResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2020-08-07T07:09:41.889+00:00'
+                path: /api/frequency
+                status: 400
+                error: Bad Request
+                message: 'Bad parameter file'
+                requestId: "4121d29f-2949"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: '2020-08-07T07:09:41.889+00:00'
+                path: /api/frequency
+                status: 500
+                error: Internal server error
+                message: ''
+                requestId: "4121d29f-2949"
+  /api/count:
+    get:
+      tags:
         - WordFrequency
       summary: Get word frequency in file
       description: >-
@@ -45,7 +178,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WordFrequencyResponse'
+                $ref: '#/components/schemas/FrequencyResponse'
         '400':
           description: Bad Request
           content:
@@ -114,7 +247,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WordFrequencyResponse'
+                $ref: '#/components/schemas/FrequencyResponse'
         '400':
           description: Bad Request
           content:
@@ -143,7 +276,7 @@ paths:
                 requestId: "4121d29f-2949"
 components:
   schemas:
-    WordFrequencyResponse:
+    FrequencyResponse:
       type: object
       description: Model word frequency.
       properties:
@@ -151,14 +284,22 @@ components:
           type: string
           example: '/home/app/some-file.txt'
           description: Full path and filename
-        kWord:
+        words:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordFrequency'
+    WordFrequency:
+      type: object
+      description: Model word frequency.
+      properties:
+        word:
           type: string
           example: 'awesome'
-          description: Searched k-word
+          description: word in text
         frequency:
           type: integer
           example: 10
-          description: How many time k-word found in text.
+          description: How many time word found in text.
     ErrorResponse:
       type: object
       description: Model error.

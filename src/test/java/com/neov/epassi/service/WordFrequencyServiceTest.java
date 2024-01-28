@@ -26,15 +26,18 @@ class WordFrequencyServiceTest {
     // When: ignore Case
     var result = wordFrequencyService.getWordFrequency(path.toString(), word, true);
     // Then:
-    Assertions.assertEquals(200, result.getFrequency());
-    Assertions.assertEquals(word, result.getkWord());
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(1, result.getWords().size());
+    Assertions.assertEquals(200, result.getWords().get(0).getFrequency());
+    Assertions.assertEquals(word, result.getWords().get(0).getWord());
     var bits = result.getFileName().split("/");
     Assertions.assertEquals(filePath, bits[bits.length -1]);
     
     // When: case sensitive w/o cache
-    result = wordFrequencyService.getWordFrequencyInUpload(path.toString(), word, false);
+    result = wordFrequencyService.getWordFrequency(path.toString(), word, false);
     // Then:
-    Assertions.assertEquals(71, result.getFrequency());
+    Assertions.assertNotNull(result);
+    Assertions.assertEquals(71, result.getWords().get(0).getFrequency());
   }
   
   @Test

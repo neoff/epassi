@@ -1,7 +1,7 @@
 package com.neov.epassi.controller;
 
-import com.neov.epassi.model.WordFrequencyResponse;
-import com.neov.epassi.service.FileUpload;
+import com.neov.epassi.model.FrequencyResponse;
+import com.neov.epassi.service.FileService;
 import com.neov.epassi.service.WordFrequencyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,18 +20,16 @@ import reactor.core.publisher.Mono;
 public class WordFrequencyController implements WordFrequencyApi {
   
   private final WordFrequencyService wordFrequencyService;
-  private final FileUpload fileUpload;
+  private final FileService fileService;
   
   @Override
-  public Mono<ResponseEntity<WordFrequencyResponse>> frequency(String word, Flux<Part> file, Boolean ignoreCase,
-                                                               ServerWebExchange exchange) {
-    return fileUpload.uploadFile(file)
-                     .map(path -> {
-                         return ResponseEntity
-                                  .ok()
-                                  .body(wordFrequencyService.getWordFrequencyInUpload(path.toString(), word, ignoreCase));
-                     })
-                     .onErrorResume(e -> {
+  public Mono<ResponseEntity<FrequencyResponse>> frequency(String word, Flux<Part> file, Boolean ignoreCase,
+                                                           ServerWebExchange exchange) {
+    return fileService.uploadFile(file)
+                      .map(path -> ResponseEntity
+                                    .ok(wordFrequencyService.getWordFrequency(path.toString(), word, ignoreCase))
+                     )
+                      .onErrorResume(e -> {
                        log.error("Error while uploading file", e);
                        return Mono.just(ResponseEntity
                                      .of(ProblemDetail
@@ -43,7 +41,7 @@ public class WordFrequencyController implements WordFrequencyApi {
   }
   
   @Override
-  public Mono<ResponseEntity<WordFrequencyResponse>> getFrequency(String file,
+  public Mono<ResponseEntity<FrequencyResponse>> getFrequency(String file,
                                                                         String word,
                                                                         Boolean ignoreCase,
                                                                         ServerWebExchange exchange) {
